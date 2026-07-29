@@ -1,0 +1,151 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "b450c7a326c08639263a",
+  "position": {
+    "x": 351.84834123222748,
+    "y": 153.17535545023696,
+    "z": 4000,
+    "height": 265.40284360189571,
+    "width": 398.86255924170615,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "lineClusteredColumnComboChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BS (Quaterwise)"
+                    }
+                  },
+                  "Property": "Quarter_Tag"
+                }
+              },
+              "queryRef": "BS (Quaterwise).Quarter_Tag",
+              "nativeQueryRef": "Quarter_Tag",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "BS (Quaterwise)"
+                        }
+                      },
+                      "Property": "Total liabilities"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(BS (Quaterwise).Total liabilities)",
+              "nativeQueryRef": "Total Liabilities",
+              "displayName": "Total Liabilities"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "BS (Quaterwise)"
+                        }
+                      },
+                      "Property": "Total Equity"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(BS (Quaterwise).Total Equity)",
+              "nativeQueryRef": "Total Equity",
+              "displayName": "Total Equity"
+            }
+          ]
+        },
+        "Y2": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "BS (Quaterwise)"
+                    }
+                  },
+                  "Property": "Debt-To-Equity Ratio"
+                }
+              },
+              "queryRef": "BS (Quaterwise).Debt-To-Equity Ratio",
+              "nativeQueryRef": "Debt-To-Equity Ratio"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "categoryAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "valueAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "secShowAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Debt-To-Equity Ratio'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

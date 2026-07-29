@@ -1,0 +1,416 @@
+table 'BS (Quaterwise)'
+	lineageTag: 55e88113-5f99-47e4-8cbf-2433c208c3a2
+
+	measure t_assets = SUM('BS (Quaterwise)'[Total assets])
+		formatString: 0
+		lineageTag: 7eade582-6276-4313-91ec-314f83cd87c3
+
+	measure t_liabilities = SUM('BS (Quaterwise)'[Total liabilities])
+		formatString: 0
+		lineageTag: 7bbb682e-c895-4faf-bd9d-b5c8d10af66f
+
+	measure 'Debt-To-Equity Ratio' = SUM('BS (Quaterwise)'[Total liabilities]) / SUM('BS (Quaterwise)'[Total Equity])
+		lineageTag: d03a50d2-0c13-49af-9945-9d85b2a4705b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure t_equity = SUM('BS (Quaterwise)'[Total Equity])
+		formatString: 0
+		lineageTag: d6ae16fa-f618-42ac-ae0d-d6f976bc6b36
+
+	measure n_assets = [t_assets] - [t_liabilities]
+		formatString: 0
+		lineageTag: 8673b54b-d54c-4ca8-af47-e1b8aeb2b5eb
+
+	measure 'Equity Ratio' = [t_equity] / [t_assets]
+		lineageTag: 4b1d11ec-2e32-4e01-90e4-62cd86574a3d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure gauge_min_val = 0
+		formatString: 0
+		lineageTag: 5b9c3a5b-b9dd-43ed-824e-05fa22044c14
+
+	measure gauge_target_val = 0.5
+		lineageTag: e76f8160-d3b9-4924-a72f-715f53e79084
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure gauge_max_val = 1.0
+		lineageTag: 36355412-de0d-413f-a913-486426a2e63e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure total_liabilities = SUM('BS (Quaterwise)'[Total liabilities])
+		formatString: 0
+		lineageTag: 71a1bd13-3c91-4d6f-9aad-7b639ed1c5aa
+
+	measure total_assets = SUM('BS (Quaterwise)'[Total assets])
+		formatString: 0
+		lineageTag: 4f60fb88-d80e-408b-9948-b784bfa256dc
+
+	measure 'Debt to Equity Color' = ```
+			
+			VAR _DE = [Debt-To-Equity Ratio]
+			RETURN
+			SWITCH (
+			    TRUE(),
+			    ISBLANK(_DE), BLANK(),
+			    _DE < 0.50, "#F9A825",   
+			    _DE <= 1.50, "#2E7D32",  
+			    _DE <= 2.50, "#EF6C00",  
+			    "#C62828"                
+			)
+			
+			```
+		lineageTag: 5562f052-9560-4d1c-a3ed-bdb0115037d5
+
+	column Quarters
+		dataType: dateTime
+		formatString: dd/mm/yyyy
+		lineageTag: 8e63c498-af5e-4022-b5e4-6d6386490ae0
+		summarizeBy: none
+		sourceColumn: Quarters
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'Cash and balances with banks and financial institutions'
+		dataType: int64
+		formatString: 0
+		lineageTag: 6c85714e-62ae-4924-b603-6e170bb3a7b9
+		summarizeBy: sum
+		sourceColumn: Cash and balances with banks and financial institutions
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Financial assets at fair value through profit or loss'
+		dataType: int64
+		formatString: 0
+		lineageTag: d8f56edb-31cf-47e1-875d-1a58c076ea7b
+		summarizeBy: sum
+		sourceColumn: Financial assets at fair value through profit or loss
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Trading properties'
+		dataType: int64
+		formatString: 0
+		lineageTag: d022de6b-f062-41a4-bbf3-c23c1ca0d2c7
+		summarizeBy: sum
+		sourceColumn: Trading properties
+
+		annotation SummarizationSetBy = Automatic
+
+	column Loans
+		dataType: int64
+		formatString: 0
+		lineageTag: 9fdadeb7-a7ec-46d1-848b-9be226417f7c
+		summarizeBy: sum
+		sourceColumn: Loans
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Financial assets at fair value through other comprehensive income'
+		dataType: int64
+		formatString: 0
+		lineageTag: 498a20d9-e241-4ce6-9f4f-841a412c94e7
+		summarizeBy: sum
+		sourceColumn: Financial assets at fair value through other comprehensive income
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Investments in associates & Joint Venture'
+		dataType: int64
+		formatString: 0
+		lineageTag: c1df399b-723a-4d02-ae4d-0ceaff2a6049
+		summarizeBy: sum
+		sourceColumn: Investments in associates & Joint Venture
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Investment properties '
+		dataType: int64
+		formatString: 0
+		lineageTag: eed41a10-bacc-4108-8b46-f87a05506533
+		summarizeBy: sum
+		sourceColumn: "Investment properties "
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Intangible assets'
+		dataType: int64
+		formatString: 0
+		lineageTag: b663762d-abb0-4c0e-b5d8-c11c5997bc59
+		summarizeBy: sum
+		sourceColumn: Intangible assets
+
+		annotation SummarizationSetBy = Automatic
+
+	column Goodwill
+		dataType: int64
+		formatString: 0
+		lineageTag: ac06e3e6-0cc3-4f86-b944-79f0ca87d5ad
+		summarizeBy: sum
+		sourceColumn: Goodwill
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Other assets'
+		dataType: int64
+		formatString: 0
+		lineageTag: 6b5b0775-6be9-4968-bf56-6dd8d717199e
+		summarizeBy: sum
+		sourceColumn: Other assets
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total assets'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7e31b7bf-26a5-410a-b4ea-f2fc158735d2
+		summarizeBy: sum
+		sourceColumn: Total assets
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Bank Borrowings'
+		dataType: int64
+		formatString: 0
+		lineageTag: a83d3293-3e8f-4858-abfc-70d70b355bd2
+		summarizeBy: sum
+		sourceColumn: Bank Borrowings
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Accounts payable and accruals'
+		dataType: int64
+		formatString: 0
+		lineageTag: ecd832d1-c55d-472c-813a-0d316f40151a
+		summarizeBy: sum
+		sourceColumn: Accounts payable and accruals
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total liabilities'
+		dataType: int64
+		formatString: 0
+		lineageTag: a33b8d30-a292-44d5-9a10-cdcb54f25914
+		summarizeBy: sum
+		sourceColumn: Total liabilities
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Net assets'
+		dataType: int64
+		formatString: 0
+		lineageTag: e7c657af-15dc-413d-9687-c90bd07f46c3
+		summarizeBy: sum
+		sourceColumn: Net assets
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'KWD 000’_1'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 34eca4e0-9d6a-4f37-a93b-63c1bff03e2e
+		summarizeBy: none
+		sourceColumn: KWD 000’_1
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Share Capital'
+		dataType: int64
+		formatString: 0
+		lineageTag: 79844e30-c45a-4fbe-8669-f9fe3fc03a98
+		summarizeBy: sum
+		sourceColumn: Share Capital
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Share premium'
+		dataType: int64
+		formatString: 0
+		lineageTag: 6c9c7d9d-645b-4996-aff6-38e9d1e0348d
+		summarizeBy: sum
+		sourceColumn: Share premium
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Statutory reserve'
+		dataType: int64
+		formatString: 0
+		lineageTag: b2106935-c23e-4aee-aae2-4dc4ff790289
+		summarizeBy: sum
+		sourceColumn: Statutory reserve
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Voluntary reserve'
+		dataType: int64
+		formatString: 0
+		lineageTag: d567012f-462c-4577-af29-13c12aeb66f9
+		summarizeBy: sum
+		sourceColumn: Voluntary reserve
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Treasury shares'
+		dataType: int64
+		formatString: 0
+		lineageTag: b4852080-f7b7-4bc1-a434-294a5a490a1f
+		summarizeBy: sum
+		sourceColumn: Treasury shares
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Treasury shares reserve'
+		dataType: int64
+		formatString: 0
+		lineageTag: d885b5c1-58ac-409b-a193-291782616737
+		summarizeBy: sum
+		sourceColumn: Treasury shares reserve
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Other reserve'
+		dataType: int64
+		formatString: 0
+		lineageTag: f3dff268-b321-4185-8efd-b3cd68b4c842
+		summarizeBy: sum
+		sourceColumn: Other reserve
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Translation reserve'
+		dataType: int64
+		formatString: 0
+		lineageTag: f802dd62-b672-4bab-97da-9fe093b1fef3
+		summarizeBy: sum
+		sourceColumn: Translation reserve
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cumulative changes in fair value'
+		dataType: int64
+		formatString: 0
+		lineageTag: 9ec9c978-fde8-419a-a721-e545ec168ff4
+		summarizeBy: sum
+		sourceColumn: Cumulative changes in fair value
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Retained earnings'
+		dataType: int64
+		formatString: 0
+		lineageTag: 25e22b3d-1e82-4cb7-b452-f0bb403ae2f2
+		summarizeBy: sum
+		sourceColumn: Retained earnings
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Equity attributable to equity holders of Parent Company'
+		dataType: int64
+		formatString: 0
+		lineageTag: 32da8afd-cc0d-4538-82b9-f6a7a99147d5
+		summarizeBy: sum
+		sourceColumn: Total Equity attributable to equity holders of Parent Company
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Non-controlling interests '
+		dataType: int64
+		formatString: 0
+		lineageTag: ae40bbe1-9e98-4c68-b9e9-9c243cf37765
+		summarizeBy: sum
+		sourceColumn: "Non-controlling interests "
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter_Tag = ```
+			
+			VAR MonthNum = MONTH('BS (Quaterwise)'[Quarters])
+			VAR YearNum = YEAR('BS (Quaterwise)'[Quarters])
+			VAR QuarterNum =
+			    SWITCH(
+			        TRUE(),
+			        MonthNum IN {1,2,3}, 1,
+			        MonthNum IN {4,5,6}, 2,
+			        MonthNum IN {7,8,9}, 3,
+			        MonthNum IN {10,11,12}, 4
+			    )
+			RETURN
+			"Q" & QuarterNum & " " & YearNum
+			
+			```
+		lineageTag: dc945145-09b2-4b19-bc6d-67f00e952209
+		summarizeBy: none
+		sortByColumn: bs_quarter_sort
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column bs_quarter_sort = ```
+			
+			YEAR('BS (Quaterwise)'[Quarters] * 10 + 
+			SWITCH(
+			    TRUE(),
+			    MONTH('BS (Quaterwise)'[Quarters]) IN {1,2,3}, 1,
+			    MONTH('BS (Quaterwise)'[Quarters]) IN {4,5,6}, 2,
+			    MONTH('BS (Quaterwise)'[Quarters]) IN {7,8,9}, 3,
+			    MONTH('BS (Quaterwise)'[Quarters]) IN {10,11,12}, 4
+			))
+			
+			```
+		formatString: 0
+		lineageTag: e430d7e9-0dbe-475b-af2e-74800ae4dc12
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Equity'
+		dataType: int64
+		formatString: 0
+		lineageTag: b921e4db-7b50-454d-ab5b-0d09010c0c5b
+		summarizeBy: sum
+		sourceColumn: Total Equity
+
+		annotation SummarizationSetBy = Automatic
+
+	column dt_code
+		dataType: int64
+		formatString: 0
+		lineageTag: 493fe5b4-8f46-4114-ba64-1c75a6dcf09f
+		summarizeBy: none
+		sourceColumn: dt_code
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'BS (Quaterwise)' = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\ionly\Documents\trend - working copy.xlsx"), null, true),
+				    #"BS (Quaterwise)_Sheet" = Source{[Item="BS (Quaterwise)",Kind="Sheet"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(#"BS (Quaterwise)_Sheet",{{"Column1", type text}, {"Column2", type any}, {"Column3", type any}, {"Column4", type any}, {"Column5", type any}, {"Column6", type any}, {"Column7", type any}, {"Column8", type any}, {"Column9", type any}, {"Column10", type any}, {"Column11", type any}, {"Column12", type any}, {"Column13", type any}, {"Column14", type any}}),
+				    #"Transposed Table" = Table.Transpose(#"Changed Type"),
+				    #"Removed Bottom Rows" = Table.RemoveLastN(#"Transposed Table",1),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Removed Bottom Rows", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"KWD 000’", type date}, {"Cash and balances with banks and financial institutions", Int64.Type}, {"Financial assets at fair value through profit or loss", Int64.Type}, {"Trading properties", Int64.Type}, {"Loans", Int64.Type}, {"Financial assets at fair value through other comprehensive income", Int64.Type}, {"Investments in associates & Joint Venture", Int64.Type}, {"Investment properties ", Int64.Type}, {"Intangible assets", Int64.Type}, {"Goodwill", Int64.Type}, {"Other assets", Int64.Type}, {"Total assets", Int64.Type}, {"Column13", type any}, {"Bank Borrowings", Int64.Type}, {"Accounts payable and accruals", Int64.Type}, {"Column16", type any}, {"Column17", type any}, {"Total liabilities", Int64.Type}, {"Net assets", Int64.Type}, {"Column20", type any}, {"KWD 000’_1", type date}, {"Column22", type any}, {"Share Capital", Int64.Type}, {"Share premium", Int64.Type}, {"Statutory reserve", Int64.Type}, {"Voluntary reserve", Int64.Type}, {"Treasury shares", Int64.Type}, {"Treasury shares reserve", Int64.Type}, {"Other reserve", Int64.Type}, {"Translation reserve", Int64.Type}, {"Cumulative changes in fair value", Int64.Type}, {"Retained earnings", Int64.Type}, {"Total Equity attributable to equity holders of Parent Company", Int64.Type}, {"Non-controlling interests ", Int64.Type}, {"Total Equity", Int64.Type}, {"Column36", Int64.Type}, {"Column37", type any}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type1",{{"KWD 000’", "Quarters"}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Renamed Columns",{"Column36", "Column37", "Column38", "Column39", "Column40", "Column41", "Column16", "Column17", "Column20", "Column22", "Column13"}),
+				    #"Added Custom" = Table.AddColumn(#"Removed Columns", "dt_code", each Date.ToText([Quarters], "yyyyMMdd")),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Added Custom",{{"dt_code", Int64.Type}})
+				in
+				    #"Changed Type2"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

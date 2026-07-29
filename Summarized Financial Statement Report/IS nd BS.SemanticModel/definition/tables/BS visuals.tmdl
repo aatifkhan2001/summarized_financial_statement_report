@@ -1,0 +1,115 @@
+table 'BS visuals'
+	lineageTag: 150e8ce1-fbc0-4bd9-9249-41850d03d088
+
+	column 'KWD 000’'
+		dataType: string
+		lineageTag: f704562b-ad1d-45ad-82b7-8f438bc7c635
+		summarizeBy: none
+		sourceColumn: KWD 000’
+
+		annotation SummarizationSetBy = Automatic
+
+	column Attribute
+		dataType: string
+		lineageTag: 5db824de-2531-45c2-acd5-53ae1a2640f8
+		summarizeBy: none
+		sourceColumn: Attribute
+
+		annotation SummarizationSetBy = Automatic
+
+	column Value
+		dataType: int64
+		formatString: 0
+		lineageTag: f0a1f316-a9cb-4c0b-90c4-6bd5c42f19ef
+		summarizeBy: sum
+		sourceColumn: Value
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column Index
+		dataType: int64
+		formatString: 0
+		lineageTag: f8bb2ba4-2637-49df-8015-05b5022b6553
+		summarizeBy: sum
+		sourceColumn: Index
+
+		annotation SummarizationSetBy = Automatic
+
+	column Classification
+		dataType: string
+		lineageTag: 5733cf03-7d75-4472-a023-c02b5f21b82b
+		summarizeBy: none
+		sourceColumn: Classification
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Quarter Label' = ```
+			
+			VAR MonthNum = MONTH('BS visuals'[Attribute])
+			VAR YearNum = YEAR('BS visuals'[Attribute])
+			VAR QuarterNum =
+			    SWITCH(
+			        TRUE(),
+			        MonthNum IN {1,2,3}, 1,
+			        MonthNum IN {4,5,6}, 2,
+			        MonthNum IN {7,8,9}, 3,
+			        MonthNum IN {10,11,12}, 4
+			    )
+			RETURN
+			"Q" & QuarterNum & " " & YearNum
+			
+			```
+		lineageTag: 85bb1878-801e-4fdd-b433-dd893fac7709
+		summarizeBy: none
+		sortByColumn: 'bs_visual_ quarter_sort'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'bs_visual_ quarter_sort' = ```
+			
+			YEAR('BS visuals'[Attribute] * 10 + 
+			SWITCH(
+			    TRUE(),
+			    MONTH('BS visuals'[Attribute]) IN {1,2,3}, 1,
+			    MONTH('BS visuals'[Attribute]) IN {4,5,6}, 2,
+			    MONTH('BS visuals'[Attribute]) IN {7,8,9}, 3,
+			    MONTH('BS visuals'[Attribute]) IN {10,11,12}, 4
+			))
+			
+			```
+		formatString: 0
+		lineageTag: 19d6c9c2-5361-4a84-9670-9f51aafa3e0b
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'BS visuals' = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\ionly\Documents\trend - working copy.xlsx"), null, true),
+				    #"BS (Quaterwise)_Sheet" = Source{[Item="BS (Quaterwise)",Kind="Sheet"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(#"BS (Quaterwise)_Sheet",{{"Column1", type text}, {"Column2", type any}, {"Column3", type any}, {"Column4", type any}, {"Column5", type any}, {"Column6", type any}, {"Column7", type any}, {"Column8", type any}, {"Column9", type any}, {"Column10", type any}, {"Column11", type any}, {"Column12", type any}, {"Column13", type any}, {"Column14", type any}}),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"KWD 000’", type text}, {"30-Sep-25", type any}, {"30-Jun-25", type any}, {"31-Mar-25", type any}, {"31-Dec-24", type any}, {"30-Sep-24", type any}, {"30-Jun-24", type any}, {"31-Mar-24", type any}, {"31-Dec-23", type any}, {"30-Sep-23", type any}, {"30-Jun-23", type any}, {"31-Mar-23", type any}, {"31-Dec-22", type any}, {"Column14", type any}}),
+				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Changed Type1", {"KWD 000’"}, "Attribute", "Value"),
+				    #"Filtered Rows" = Table.SelectRows(#"Unpivoted Other Columns", each ([#"KWD 000’"] <> null and [#"KWD 000’"] <> "KWD 000’")),
+				    #"Added Index" = Table.AddIndexColumn(#"Filtered Rows", "Index", 1, 1, Int64.Type),
+				    #"Removed Columns" = Table.RemoveColumns(#"Added Index",{"Index"}),
+				    #"Added Index1" = Table.AddIndexColumn(#"Removed Columns", "Index", 1, 1, Int64.Type),
+				    #"Added Custom" = Table.AddColumn(#"Added Index1", "Classification", each if [Index] >= 1 and [Index] <= 120 then "Assets"
+				else if [Index] >= 133 and [Index] <= 156 then "Liabilities"
+				else if ([Index] >= 181 and [Index] <= 300) or ([Index] >= 313 and [Index] <= 324) then "Equity"
+				else "Calculation"),
+				    #"Filtered Rows1" = Table.SelectRows(#"Added Custom", each true)
+				in
+				    #"Filtered Rows1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

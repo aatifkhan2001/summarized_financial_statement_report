@@ -1,0 +1,533 @@
+table 'IS (Quaterwise)'
+	lineageTag: 177f7d72-9ed2-4c68-9f86-28f855fa44e9
+
+	measure abs_nonrecurrval = ```
+			
+			SUMX(
+			    'IS (Quaterwise)',
+			    IF('IS (Quaterwise)'[Non-Recurring Revenue] < 0, ABS('IS (Quaterwise)'[Non-Recurring Revenue]), 'IS (Quaterwise)'[Non-Recurring Revenue])
+			)
+			
+			```
+		formatString: 0
+		lineageTag: ef0ce9e7-5471-4ea1-870e-e17cf9c7bbc0
+
+	measure 'total revenue' = CALCULATE(SUM('IS (Quaterwise)'[Total income]))
+		formatString: 0
+		lineageTag: 4a7122ad-1259-4a92-a70b-e287afa8e255
+
+	measure t_expenses = CALCULATE(SUM('IS (Quaterwise)'[Total expenses]))
+		formatString: 0
+		lineageTag: f32c36b0-a422-4c98-8fcd-98217705dc5e
+
+	measure net_profit = SUM('IS (Quaterwise)'[Net profit])
+		formatString: 0
+		lineageTag: 0f89991c-d884-48d6-b4ee-e02a4a389c84
+
+	measure 'coverage ratio' = SUM('IS (Quaterwise)'[Administrative expenses]) / SUM('IS (Quaterwise)'[Recurring Revenue])
+		lineageTag: 5a33f696-aa68-43a8-b15f-edfbc08cfba4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Coverage Ratio Color' = ```
+			
+			IF(
+			    [Coverage Ratio] > 0.5,   
+			    "Red",
+			    "Green"                   
+			)
+			
+			```
+		lineageTag: 22b2b127-cad1-4d3a-a000-848ee0eff0ec
+
+	measure cost_to_income_ratio = SUM('IS (Quaterwise)'[Total expenses]) / SUM('IS (Quaterwise)'[Total income])
+		lineageTag: 073472e3-d302-4158-adb1-52cfa75d5ba5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure operating_expense_ratio = SUM('IS (Quaterwise)'[Administrative expenses])/ SUM('IS (Quaterwise)'[Total income])
+		lineageTag: c8c1b7e2-1654-4fdc-bf22-a2b9c1943087
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'OER Color' = ```
+			
+			VAR _OER = [operating_expense_ratio]
+			RETURN
+			SWITCH (
+			    TRUE(),
+			    ISBLANK(_OER), BLANK(),
+			    _OER <= 0.30, "#2E7D32",   
+			    _OER <= 0.45, "#F9A825",   
+			    _OER <= 0.60, "#EF6C00",   
+			    "#C62828"                 
+			)
+			
+			```
+		lineageTag: e573c2cd-e76f-4f3e-9ff0-708371ff3d92
+
+	measure 'CIR Color' = ```
+			
+			VAR _CIR = [cost_to_income_ratio]
+			RETURN
+			SWITCH (
+			    TRUE(),
+			    ISBLANK(_CIR), BLANK(),
+			    _CIR < 0.40, "#2E7D32",   
+			    _CIR < 0.50, "#F9A825",   
+			    _CIR < 0.60, "#EF6C00",   
+			    "#C62828"                 
+			)
+			
+			```
+		lineageTag: c6e3a98f-9b08-4220-8899-2d69ffc04aad
+
+	column Quarters
+		dataType: dateTime
+		formatString: dd/mm/yyyy
+		lineageTag: 1453f26e-c536-4a8b-956b-7c675833198c
+		summarizeBy: none
+		sourceColumn: Quarters
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'Realized gains on financial assets at FVTPL'
+		dataType: int64
+		formatString: 0
+		lineageTag: a74c61b5-1b6a-4b67-9dbd-e0d04b1d0f20
+		summarizeBy: sum
+		sourceColumn: Realized gains on financial assets at FVTPL
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Unrealized losses on financial assets at FVTPL'
+		dataType: int64
+		formatString: 0
+		lineageTag: bfcb04d4-65cd-451d-9229-c205912b9d09
+		summarizeBy: sum
+		sourceColumn: Unrealized losses on financial assets at FVTPL
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Changes in fair value of investment properties'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7d475126-5e32-49d5-a584-cce131edfb25
+		summarizeBy: sum
+		sourceColumn: Changes in fair value of investment properties
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Gain on sale of investment properties'
+		dataType: int64
+		formatString: 0
+		lineageTag: 026a2d0d-deac-4ae6-bc52-6289ca390f8a
+		summarizeBy: sum
+		sourceColumn: Gain on sale of investment properties
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Rental income'
+		dataType: int64
+		formatString: 0
+		lineageTag: e5be6f15-1900-4853-9be2-b94ba37cdf50
+		summarizeBy: sum
+		sourceColumn: Rental income
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dividend income'
+		dataType: int64
+		formatString: 0
+		lineageTag: 08b817c4-2c3b-4344-86ef-22a52b707e2c
+		summarizeBy: sum
+		sourceColumn: Dividend income
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Management, brokerage, advisory and service fees '
+		dataType: int64
+		formatString: 0
+		lineageTag: a719061f-96a2-48f0-8f12-f6ef93d60398
+		summarizeBy: sum
+		sourceColumn: "Management, brokerage, advisory and service fees "
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Interest income'
+		dataType: int64
+		formatString: 0
+		lineageTag: 34508210-44d5-4223-9d66-6d3527fbd534
+		summarizeBy: sum
+		sourceColumn: Interest income
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Share of results of associates & joint venture'
+		dataType: int64
+		formatString: 0
+		lineageTag: 82a94a3c-8efb-42e9-ba34-f6b5475a8267
+		summarizeBy: sum
+		sourceColumn: Share of results of associates & joint venture
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Net gain on sale of associate'
+		dataType: int64
+		formatString: 0
+		lineageTag: ac6efc85-566c-4fb7-8936-4fb37c1fbff2
+		summarizeBy: sum
+		sourceColumn: Net gain on sale of associate
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Gain on foreign exchange trading'
+		dataType: int64
+		formatString: 0
+		lineageTag: ad094129-e205-45df-8a68-c545456b96b9
+		summarizeBy: sum
+		sourceColumn: Gain on foreign exchange trading
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total income'
+		dataType: int64
+		formatString: 0
+		lineageTag: 5616b1c4-f244-4704-a65e-eeb8767cb10f
+		summarizeBy: sum
+		sourceColumn: Total income
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Administrative expenses'
+		dataType: int64
+		formatString: 0
+		lineageTag: 72a6624c-d8a9-45ff-94ec-284d7501eeea
+		summarizeBy: sum
+		sourceColumn: Administrative expenses
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Finance costs'
+		dataType: int64
+		formatString: 0
+		lineageTag: 21eafc07-ba3a-4e4b-890d-7a7c6b8867af
+		summarizeBy: sum
+		sourceColumn: Finance costs
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Reversal of impairment losses and other provisions'
+		dataType: int64
+		formatString: 0
+		lineageTag: 07c8dc06-ac85-4940-83a9-510fce548445
+		summarizeBy: sum
+		sourceColumn: Reversal of impairment losses and other provisions
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Gain on foreign currency translation'
+		dataType: int64
+		formatString: 0
+		lineageTag: 68f2c6cd-0375-437a-8918-6902d498eaf5
+		summarizeBy: sum
+		sourceColumn: Gain on foreign currency translation
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total expenses'
+		dataType: int64
+		formatString: 0
+		lineageTag: 186a2daa-3440-4eb1-a58f-000e3e9848cc
+		summarizeBy: sum
+		sourceColumn: Total expenses
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Net profit before taxes'
+		dataType: int64
+		formatString: 0
+		lineageTag: a0db4ae8-ddd7-410c-b57d-ca21536bc19e
+		summarizeBy: sum
+		sourceColumn: Net profit before taxes
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Taxes and BOD fees'
+		dataType: int64
+		formatString: 0
+		lineageTag: 9a605e37-7277-4491-ba54-fb712740c35f
+		summarizeBy: sum
+		sourceColumn: Taxes and BOD fees
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Net profit'
+		dataType: int64
+		formatString: 0
+		lineageTag: cc8d2c14-42b1-47fc-af2b-ec9f29edeb49
+		summarizeBy: sum
+		sourceColumn: Net profit
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Less: Share of Minority Shareholders (NCI) - loss (profit)'
+		dataType: int64
+		formatString: 0
+		lineageTag: f268cc7f-0111-47da-a607-d9ad30130e50
+		summarizeBy: sum
+		sourceColumn: Less: Share of Minority Shareholders (NCI) - loss (profit)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Net profit attributable to Parent Company'
+		dataType: int64
+		formatString: 0
+		lineageTag: 2d7eb45c-da54-4006-ae65-787d758f263d
+		summarizeBy: sum
+		sourceColumn: Net profit attributable to Parent Company
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Earnings per share (in fils)'
+		dataType: double
+		lineageTag: b23a97ec-ce72-44af-b806-108fcc63e08a
+		summarizeBy: sum
+		sourceColumn: Earnings per share (in fils)
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Bid Price Boursa Kuwait '
+		dataType: double
+		lineageTag: 02bb1a0e-ac00-4c00-b7aa-1e00666fde3a
+		summarizeBy: sum
+		sourceColumn: "Bid Price Boursa Kuwait "
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Discount '
+		dataType: double
+		lineageTag: bf16e903-d473-4eee-b8f0-a7f788dfc4e3
+		summarizeBy: sum
+		sourceColumn: "Discount "
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Adj BP'
+		dataType: double
+		lineageTag: 88fae962-05e9-4f67-9ff2-23be12017b06
+		summarizeBy: sum
+		sourceColumn: Adj BP
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'FV on Boursa Kuwait '
+		dataType: double
+		lineageTag: 6f2bcd72-e668-4f03-a330-6877889b6547
+		summarizeBy: sum
+		sourceColumn: "FV on Boursa Kuwait "
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Exps incl Tax & NCI'
+		dataType: int64
+		formatString: 0
+		lineageTag: 87d36c06-a22d-44e4-8d27-5fb09a2574e0
+		summarizeBy: sum
+		sourceColumn: Exps incl Tax & NCI
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Wght avg # of shares'
+		dataType: int64
+		formatString: 0
+		lineageTag: 42c5a456-70b1-428b-b610-4812e56a7fb0
+		summarizeBy: sum
+		sourceColumn: Wght avg # of shares
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Recurring Revenue'
+		dataType: int64
+		formatString: 0
+		lineageTag: be8a2c23-68c7-4a94-853f-dbcd87f62414
+		summarizeBy: sum
+		sourceColumn: Recurring Revenue
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Non-Recurring Revenue'
+		dataType: int64
+		formatString: 0.00;-0.0;"Zero
+		lineageTag: dac151fa-9d55-4cf9-b2c6-53fffd107872
+		summarizeBy: sum
+		sourceColumn: Non-Recurring Revenue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column 'Cost to Income ratio'
+		dataType: double
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: fc6f915f-b880-483c-8914-e913596dcbf8
+		summarizeBy: sum
+		sourceColumn: Cost to Income ratio
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'recurr rev to total inc'
+		dataType: double
+		lineageTag: 520267cb-674c-4277-b38f-f99b841f4ed4
+		summarizeBy: sum
+		sourceColumn: recurr rev to total inc
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'non-recurr rev to total inc'
+		dataType: double
+		lineageTag: 3dd15b7e-c1fe-4e67-905d-db0a9ebc77ba
+		summarizeBy: sum
+		sourceColumn: non-recurr rev to total inc
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Non-Recurring Expense'
+		dataType: int64
+		formatString: 0
+		lineageTag: 45b29bcf-c94e-49ad-bb7e-cd537083796a
+		summarizeBy: sum
+		sourceColumn: Non-Recurring Expense
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Operating Expense Ratio'
+		dataType: double
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: a9696b74-7653-41da-96fe-6768c36ea348
+		summarizeBy: sum
+		sourceColumn: Operating Expense Ratio
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Quarter Label' = ```
+			
+			VAR MonthNum = MONTH('IS (Quaterwise)'[Quarters])
+			VAR YearNum = YEAR('IS (Quaterwise)'[Quarters])
+			VAR QuarterNum =
+			    SWITCH(
+			        TRUE(),
+			        MonthNum IN {1,2,3}, 1,
+			        MonthNum IN {4,5,6}, 2,
+			        MonthNum IN {7,8,9}, 3,
+			        MonthNum IN {10,11,12}, 4
+			    )
+			RETURN
+			"Q" & QuarterNum & " " & YearNum
+			
+			```
+		lineageTag: 0db6dfeb-5126-42ab-a8db-be073225c69f
+		summarizeBy: none
+		sortByColumn: 'dropdown sort'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'dropdown sort' = ```
+			
+			YEAR('IS (Quaterwise)'[Quarters]) * 10 + 
+			SWITCH(
+			    TRUE(),
+			    MONTH('IS (Quaterwise)'[Quarters]) IN {1,2,3}, 1,
+			    MONTH('IS (Quaterwise)'[Quarters]) IN {4,5,6}, 2,
+			    MONTH('IS (Quaterwise)'[Quarters]) IN {7,8,9}, 3,
+			    MONTH('IS (Quaterwise)'[Quarters]) IN {10,11,12}, 4
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 51e77dfd-2f1c-4b3c-afb1-c31b0fa436d8
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q_Year = YEAR('IS (Quaterwise)'[Quarters])
+		formatString: 0
+		lineageTag: 49b279b0-d020-406f-9a4b-e9709f775419
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column dt_code
+		dataType: int64
+		formatString: 0
+		lineageTag: 7648a76b-93ad-461e-be37-4cd8ae8536ec
+		summarizeBy: none
+		sourceColumn: dt_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column quarter_label_quarter_only = ```
+			
+			VAR MonthNum = MONTH('IS (Quaterwise)'[Quarters])
+			VAR YearNum = YEAR('IS (Quaterwise)'[Quarters])
+			VAR QuarterNum =
+			    SWITCH(
+			        TRUE(),
+			        MonthNum IN {1,2,3}, 1,
+			        MonthNum IN {4,5,6}, 2,
+			        MonthNum IN {7,8,9}, 3,
+			        MonthNum IN {10,11,12}, 4
+			    )
+			RETURN
+			"Q" & QuarterNum 
+			
+			```
+		lineageTag: d849adf3-a6e2-4294-bb8b-111e52d6f18f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'IS (Quaterwise)' = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\ionly\Documents\trend - working copy.xlsx"), null, true),
+				    #"IS (Quaterwise)_Sheet" = Source{[Item="IS (Quaterwise)",Kind="Sheet"]}[Data],
+				    #"Transposed Table" = Table.Transpose(#"IS (Quaterwise)_Sheet"),
+				    #"Removed Columns" = Table.RemoveColumns(#"Transposed Table",{"Column1"}),
+				    #"Removed Bottom Rows" = Table.RemoveLastN(#"Removed Columns",2),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Removed Bottom Rows", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"KWD 000’", type date}, {"Realized gains on financial assets at FVTPL", Int64.Type}, {"Unrealized losses on financial assets at FVTPL", Int64.Type}, {"Changes in fair value of investment properties", Int64.Type}, {"Gain on sale of investment properties", Int64.Type}, {"Rental income", Int64.Type}, {"Dividend income", Int64.Type}, {"Management, brokerage, advisory and service fees ", Int64.Type}, {"Interest income", Int64.Type}, {"Share of results of associates & joint venture", Int64.Type}, {"Net gain on sale of associate", Int64.Type}, {"Gain on foreign exchange trading", Int64.Type}, {"Total income", Int64.Type}, {"Column14", type any}, {"Administrative expenses", Int64.Type}, {"Finance costs", Int64.Type}, {"Reversal of impairment losses and other provisions", Int64.Type}, {"Gain on foreign currency translation", Int64.Type}, {"Total expenses", Int64.Type}, {"Net profit before taxes", Int64.Type}, {"Taxes and BOD fees", Int64.Type}, {"Net profit", Int64.Type}, {"Less: Share of Minority Shareholders (NCI) - loss (profit)", Int64.Type}, {"Net profit attributable to Parent Company", Int64.Type}, {"Column25", type any}, {"Earnings per share (in fils)", type number}, {"Column27", type any}, {"Bid Price Boursa Kuwait ", type number}, {"Discount ", type number}, {"Adj BP", type number}, {"FV on Boursa Kuwait ", type number}, {"Column32", type any}, {"Exps incl Tax & NCI", Int64.Type}, {"Wght avg # of shares", Int64.Type}, {"Column35", type any}, {"Column36", type any}, {"Column37", type any}, {"Column38", type any}, {"Recurring Revenue", Int64.Type}, {"Non-Recurring Revenue", Int64.Type}, {"Cost to Income ratio", type number}, {"recurr rev to total inc", type number}, {"non-recurr rev to total inc", type number}, {"Non-Recurring Expense", Int64.Type}, {"Operating Expense Ratio", type number}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"KWD 000’", "Quarters"}}),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Renamed Columns",{"Column38", "Column37", "Column36", "Column35", "Column32", "Column27", "Column25", "Column14"}),
+				    #"Added Custom" = Table.AddColumn(#"Removed Columns1", "dt_code", each Date.ToText([Quarters], "yyyyMMdd")),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Added Custom",{{"dt_code", Int64.Type}}),
+				    #"Removed Columns2" = Table.RemoveColumns(#"Changed Type1",{"Column46", "Column47"}),
+				    #"Removed Errors" = Table.RemoveRowsWithErrors(#"Removed Columns2", {"dt_code"})
+				in
+				    #"Removed Errors"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,141 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "bf5f8be185e140882ef5",
+  "position": {
+    "x": 36.398104265402843,
+    "y": 157.7251184834123,
+    "z": 7000,
+    "height": 236.58767772511845,
+    "width": 450.42654028436016,
+    "tabOrder": 7000
+  },
+  "visual": {
+    "visualType": "lineClusteredColumnComboChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "IS (Quaterwise)"
+                    }
+                  },
+                  "Property": "Quarter Label"
+                }
+              },
+              "queryRef": "IS (Quaterwise).Quarter Label",
+              "nativeQueryRef": "Quarter ",
+              "active": true,
+              "displayName": "Quarter "
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "IS (Quaterwise)"
+                        }
+                      },
+                      "Property": "Total income"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(IS (Quaterwise).Total income)",
+              "nativeQueryRef": "Total income",
+              "displayName": "Total income"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "IS (Quaterwise)"
+                        }
+                      },
+                      "Property": "Total expenses"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(IS (Quaterwise).Total expenses)",
+              "nativeQueryRef": "Total expenses",
+              "displayName": "Total expenses"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "IS (Quaterwise)"
+                  }
+                },
+                "Property": "Quarter Label"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "visualContainerObjects": {
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 7,
+                      "Percent": 0.2
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

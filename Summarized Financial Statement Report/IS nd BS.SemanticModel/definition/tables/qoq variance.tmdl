@@ -1,0 +1,229 @@
+table 'qoq variance'
+	lineageTag: 15aa1a02-99fd-4055-bf77-95dfa6b93cdd
+
+	measure NextQuarterDiff = ```
+			
+			VAR CurrentVal = SUM('qoq variance'[Value])
+			VAR NextVal = CALCULATE(
+			    SUM('qoq variance'[Value]),
+			    NEXTQUARTER('qoq variance'[Attribute])
+			)
+			RETURN
+			IF(ISBLANK(NextVal), BLANK(), CurrentVal - NextVal)
+			
+			```
+		lineageTag: 1cdc945d-b8dd-4e7e-8163-19263c847de8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'QoQ %' = ```
+			
+			VAR qoq_curr = [NextQuarterDiff]
+			VAR next_val = CALCULATE(
+			    SUM('qoq variance'[Value]),
+			    NEXTQUARTER('qoq variance'[Attribute])
+			)
+			RETURN
+			DIVIDE(qoq_curr, next_val)
+			
+			```
+		lineageTag: e443d5af-be01-4b18-bb67-3fc7e682e0aa
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure fy_2023 = ```
+			
+			CALCULATE(SUM('qoq variance'[Value]),
+			          FILTER('qoq variance',  YEAR('qoq variance'[Attribute]) = 2023))  
+			
+			```
+		lineageTag: e6f1b713-67ae-49bb-98b0-0a0705412fd5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure fy_2024 = ```
+			
+			CALCULATE(SUM('qoq variance'[Value]),
+			          FILTER('qoq variance', YEAR('qoq variance'[Attribute]) = 2024))  
+			
+			```
+		lineageTag: c6515502-b056-4b6a-b37e-3a8bfa9aeb3f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure q1_2025 =
+			
+			CALCULATE(SUM('qoq variance'[Value]),
+			          MONTH('qoq variance'[Attribute]) IN {1,2,3},
+			          YEAR('qoq variance'[Attribute]) = 2025
+			)
+		lineageTag: 8439d98d-6949-4e53-85ff-f2d6277c1eb9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure q2_2025 =
+			
+			CALCULATE(SUM('qoq variance'[Value]),
+			          MONTH('qoq variance'[Attribute]) IN {4,5,6},
+			          YEAR('qoq variance'[Attribute]) = 2025
+			)
+		lineageTag: bf81db8c-205c-4a48-8508-0086e7bb36f6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure q3_2025 =
+			
+			CALCULATE(SUM('qoq variance'[Value]),
+			          MONTH('qoq variance'[Attribute]) IN {7,8,9},
+			          YEAR('qoq variance'[Attribute]) = 2025
+			)
+		lineageTag: 3f364130-8670-4aa2-a1c1-15864932091f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure q4_2022 =
+			
+			CALCULATE(SUM('qoq variance'[Value]),
+			          MONTH('qoq variance'[Attribute]) IN {10,11,12},
+			          YEAR('qoq variance'[Attribute]) = 2022
+			)
+		lineageTag: 650f9ce0-ddc0-4650-8bb2-b56568cdcece
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'YOY Diff (2023-2024)' =
+			
+			[fy_2024] - [fy_2023]
+		lineageTag: d27377f6-1d37-4046-a03c-3932657f2d12
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'YOY %' = DIVIDE([YOY Diff (2023-2024)], [fy_2023], "N/A")
+		lineageTag: f884d70f-4b2c-41c3-9f0d-3a06c35440c5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Consolidated
+		dataType: string
+		lineageTag: 831d5b77-d680-4eda-806f-96bf6a6b98a9
+		summarizeBy: none
+		sourceColumn: Consolidated
+
+		annotation SummarizationSetBy = Automatic
+
+	column Attribute
+		dataType: dateTime
+		formatString: dd/mm/yyyy
+		lineageTag: fd4db45a-0584-49d6-bce8-c5a7ed74cde8
+		summarizeBy: none
+		sourceColumn: Attribute
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column Value
+		dataType: int64
+		formatString: 0
+		lineageTag: 57b39936-6b50-4cc2-b0d0-1cf2bbd47f9f
+		summarizeBy: sum
+		sourceColumn: Value
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column QuarterLabel = ```
+			
+			"Q" & 
+			ROUNDUP(MONTH('qoq variance'[Attribute])/3,0) & " " & YEAR('qoq variance'[Attribute])
+			
+			```
+		dataType: string
+		lineageTag: 05023a10-6140-4001-ad13-77c2761be88b
+		summarizeBy: none
+		sortByColumn: bs_quarter_sort
+
+		changedProperty = SortByColumn
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column Index
+		dataType: int64
+		formatString: 0
+		lineageTag: 2be08048-7d3a-474e-a3ac-7de00cde6aac
+		summarizeBy: sum
+		sourceColumn: Index
+
+		annotation SummarizationSetBy = Automatic
+
+	column Classification
+		dataType: string
+		lineageTag: 938b1af8-4f3c-4d5f-b6f0-8a9fbb873b39
+		summarizeBy: none
+		sourceColumn: Classification
+
+		annotation SummarizationSetBy = Automatic
+
+	column bs_quarter_sort = ```
+			
+			YEAR('qoq variance'[Attribute] * 10 + 
+			SWITCH(
+			    TRUE(),
+			    MONTH('qoq variance'[Attribute]) IN {1,2,3}, 1,
+			    MONTH('qoq variance'[Attribute]) IN {4,5,6}, 2,
+			    MONTH('qoq variance'[Attribute]) IN {7,8,9}, 3,
+			    MONTH('qoq variance'[Attribute]) IN {10,11,12}, 4
+			))
+			
+			```
+		formatString: 0
+		lineageTag: a5ab2958-df6c-4498-b717-f6e8b77ed7ea
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column quarter_no
+		dataType: int64
+		formatString: 0
+		lineageTag: 65a5cd53-2aac-4d51-8aa6-99a60a75f28a
+		summarizeBy: sum
+		sourceColumn: quarter_no
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'qoq variance' = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\ionly\Documents\trend - working copy.xlsx"), null, true),
+				    #"IS (Quaterwise)_Sheet" = Source{[Item="IS (Quaterwise)",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"IS (Quaterwise)_Sheet", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Consolidated", type text}, {"9 months ended", type any}, {"Column1", type any}, {"Column2", type any}, {"12 months ended", type any}, {"Column3", type any}, {"Column4", type any}, {"Column5", type any}, {"12 months ended6", type any}, {"Column7", type any}, {"Column8", type any}, {"Column9", type any}, {"Column10", type any}, {"Column11", type any}, {"Column15", type any}}),
+				    #"Promoted Headers1" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers1",{{"KWD 000’", type text}, {"9/30/2025", type number}, {"6/30/2025", type number}, {"3/31/2025", type number}, {"12/31/2024", type number}, {"9/30/2024", type number}, {"6/30/2024", type number}, {"3/31/2024", type number}, {"12/31/2023", type number}, {"9/30/2023", type number}, {"6/30/2023", type number}, {"3/31/2023", type number}, {"12/31/2022", type number}, {"Variance", type number}, {"% Variance", type number}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type1",{{"KWD 000’", "Consolidated"}}),
+				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Renamed Columns", {"Consolidated"}, "Attribute", "Value"),
+				    #"Filtered Rows" = Table.SelectRows(#"Unpivoted Other Columns", each ([Attribute] <> "% Variance" and [Attribute] <> "Variance") and ([Consolidated] <> "Adj BP" and [Consolidated] <> "Bid Price Boursa Kuwait " and [Consolidated] <> "Cost to Income ratio" and [Consolidated] <> "Discount " and [Consolidated] <> "Exps incl Tax & NCI" and [Consolidated] <> "FV on Boursa Kuwait " and [Consolidated] <> "non-recurr rev to total inc" and [Consolidated] <> "Non-Recurring Expense" and [Consolidated] <> "Non-Recurring Revenue" and [Consolidated] <> "Operating Expense Ratio" and [Consolidated] <> "recurr rev to total inc" and [Consolidated] <> "Recurring Revenue" and [Consolidated] <> "Wght avg # of shares")),
+				    #"Added Index" = Table.AddIndexColumn(#"Filtered Rows", "Index", 0, 1, Int64.Type),
+				    #"Filtered Rows1" = Table.SelectRows(#"Added Index", each true),
+				    #"Added Custom" = Table.AddColumn(#"Filtered Rows1", "Classification", each if [Index] <= 132 then "Income" else if [Index] <= 192 then "Expense" else if [Index] <= 264 then "Net Profit & Adjustments" else null),
+				    #"Filtered Rows2" = Table.SelectRows(#"Added Custom", each true),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Filtered Rows2",{{"Attribute", type date}}),
+				    #"Duplicated Column" = Table.DuplicateColumn(#"Changed Type2", "Attribute", "Attribute - Copy"),
+				    #"Calculated Quarter" = Table.TransformColumns(#"Duplicated Column",{{"Attribute - Copy", Date.QuarterOfYear, Int64.Type}}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Calculated Quarter",{{"Attribute - Copy", "quarter_no"}}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Renamed Columns1",{"Consolidated", "Attribute", "quarter_no", "Value", "Index", "Classification"})
+				in
+				    #"Reordered Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

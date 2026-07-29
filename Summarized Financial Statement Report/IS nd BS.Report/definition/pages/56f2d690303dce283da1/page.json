@@ -1,0 +1,56 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "56f2d690303dce283da1",
+  "displayName": "Balance Sheet ",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "visibility": "HiddenInViewMode",
+  "visualInteractions": [
+    {
+      "source": "34462d0701471a768e6c",
+      "target": "b450c7a326c08639263a",
+      "type": "NoFilter"
+    },
+    {
+      "source": "b450c7a326c08639263a",
+      "target": "5f56bf125b182f3c6d5c",
+      "type": "NoFilter"
+    },
+    {
+      "source": "b450c7a326c08639263a",
+      "target": "21493d5c4cefad9a4e8f",
+      "type": "NoFilter"
+    },
+    {
+      "source": "b450c7a326c08639263a",
+      "target": "4a77555b711d9bfa3d3b",
+      "type": "NoFilter"
+    },
+    {
+      "source": "b450c7a326c08639263a",
+      "target": "de024e6e3cf82863a381",
+      "type": "NoFilter"
+    },
+    {
+      "source": "b450c7a326c08639263a",
+      "target": "34462d0701471a768e6c",
+      "type": "NoFilter"
+    },
+    {
+      "source": "34462d0701471a768e6c",
+      "target": "854e93777f1bc46a0d55",
+      "type": "NoFilter"
+    },
+    {
+      "source": "854e93777f1bc46a0d55",
+      "target": "34462d0701471a768e6c",
+      "type": "NoFilter"
+    },
+    {
+      "source": "854e93777f1bc46a0d55",
+      "target": "de024e6e3cf82863a381",
+      "type": "NoFilter"
+    }
+  ]
+}

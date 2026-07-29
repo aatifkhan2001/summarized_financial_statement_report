@@ -1,0 +1,45 @@
+table DateTb
+	lineageTag: d8602773-889f-4b30-98e9-ad059607b466
+	dataCategory: Time
+
+	column Date
+		isKey
+		formatString: General Date
+		lineageTag: 98fc587e-3951-4c0b-a89d-e2ff7825cecd
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		formatString: 0
+		lineageTag: 1a3c5b25-3988-45f1-8ebc-95c0288a9783
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		lineageTag: 4a4ab85c-e74a-4aab-b34b-ffc495d3a6bc
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DateTb = calculated
+		mode: import
+		source = ```
+				
+				ADDCOLUMNS(
+				    CALENDAR(DATE(2022,1,1), DATE(2025,12,31)),
+				    "Year", YEAR([Date]),
+				    "Quarter", "Q" & FORMAT(QUARTER([Date]), "0") & "-" & YEAR([Date])
+				)
+				
+				```
+
+	annotation PBI_Id = b0f7ad35ef8a4d46b9e90eec5a0706bf
+

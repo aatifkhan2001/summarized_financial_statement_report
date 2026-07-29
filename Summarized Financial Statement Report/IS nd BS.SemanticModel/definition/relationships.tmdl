@@ -1,0 +1,6 @@
+relationship AutoDetected_f0742647-1aef-4e5c-84ea-f5696042fa2d
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: 'IS (Quaterwise)'.dt_code
+	toColumn: 'BS (Quaterwise)'.dt_code
+
